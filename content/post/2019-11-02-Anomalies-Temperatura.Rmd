@@ -33,7 +33,7 @@ library(tidymodels)
 ### Dades
 
 ```{r}
-machine <- read_csv("Machine-Failure/machine_temperature_system_failure.csv")
+machine <- read_csv("machine_temperature_system_failure.csv")
 df_status(machine)
 
 machine <- 
@@ -45,7 +45,7 @@ machine <-
 ggplot(machine, aes(x = timestamp, y=temp))+
   geom_line(color="grey30")+
   theme_minimal()+
-  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.line.x = element_blank(),
@@ -75,7 +75,7 @@ machine <-
 ggplot(machine, aes(x = timestamp, y=temp, color= grup))+
   geom_line()+
   theme_minimal()+
-  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
   theme(legend.position = "none",
         axis.ticks.x = element_blank(),
         axis.line.x = element_blank(),
@@ -87,7 +87,7 @@ ggplot(machine, aes(x = timestamp, y=temp, color= grup))+
 ggplot(machine, aes(x=temp, fill= grup))+
   geom_histogram(color= "white")+
   theme_minimal()+
-  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
   theme(legend.position = "none",
         axis.ticks.x = element_blank(),
         axis.line.x = element_blank(),
@@ -99,7 +99,7 @@ ggplot(machine, aes(x=temp, fill= grup))+
 ggplot(machine, aes(y=temp, fill= grup))+
   geom_boxplot()+
   theme_minimal()+
-  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
   theme(legend.position = "top",
         axis.ticks.x = element_blank(),
         axis.line.x = element_blank(),
@@ -110,7 +110,7 @@ ggplot(machine, aes(y=temp, fill= grup))+
 
 ```
 
-### Transformació Dades
+### Transformaci? Dades
 
 ```{r}
 machine_num <- 
@@ -129,10 +129,10 @@ acp <-prcomp(machine_num, center=T, scale.=T) # PCA + estandatitzaciÃ³ de variab
 
 acp
 
-# eigenvalue: valors superiors a 1, variança percentual acumulada
+# eigenvalue: valors superiors a 1, varian?a percentual acumulada
 get_eigenvalue(acp)
 
-# gràfic variança acumulada
+# gr?fic varian?a acumulada
 fviz_eig(acp, addlabels = TRUE, ylim = c(0, 40))
 
 actives <- 
@@ -179,7 +179,7 @@ rect.hclust(hc.ward, k=11, border="red")
 ```{r}
 k_15 <- cutree(hc.ward, k = 11)
 
-# assignació de cluster segons hcust
+# assignaci? de cluster segons hcust
 actives$k <- as.factor(k_15)
 
 prop <- prop.table(table(k_15))
@@ -187,7 +187,7 @@ round(prop,2)
 table(k_15)
 ```
 
-### Gràfic Cluster HCLUST
+### Gr?fic Cluster HCLUST
 
 ```{r, fig.height= 8, fig.width= 15, fig.align= "center"}
 actives %>% 
@@ -243,19 +243,19 @@ k_mean <- kmeans(actives[,1:3], centers = cdg)
 # k_mean$size
 # table(actives$k, k_mean$cluster)
  
-# assignació de cluster segons kmean
+# assignaci? de cluster segons kmean
 actives$kmean <-as.factor(k_mean$cluster)
 machine$kmean <-as.factor(k_mean$cluster)
 
-#distribució cluster, size
+#distribuci? cluster, size
 k_mean %>% 
   tidy() %>% 
   select(cluster, size) %>% 
-  kable(caption = "Distribució clusters") %>% 
+  kable(caption = "Distribuci? clusters") %>% 
   kable_styling(full_width = F)
 ```
 
-### Comparació K-MEANS / HCLUST
+### Comparaci? K-MEANS / HCLUST
 
 ```{r}
 c_m <- conf_mat(actives, k, kmean, dnn= c("kmean", "hclust"))
@@ -284,7 +284,7 @@ percent(accu$.estimate)
 # index d'estabilitat 84.84%
 ```
 
-### Gràfic Clusters K-MEANS
+### Gr?fic Clusters K-MEANS
 
 ```{r, fig.height= 8, fig.width= 15, fig.align= "center"}
 # plot clusters ggplot
@@ -318,7 +318,7 @@ actives %>%
 ```
 
 
-### Gràfic 3-D clusters K-MEANS
+### Gr?fic 3-D clusters K-MEANS
 
 ```{r}
 plot_ly(x=actives$PC1_dia, y=actives$PC2_hora, z=actives$PC3_temp, type="scatter3d", mode="markers", color=actives$kmean)
@@ -338,7 +338,7 @@ centroids <-
   select('PC1_cen' = 'PC1_dia', 'PC2_cen'= "PC2_hora", 'PC3_cen'= "PC3_temp")
 head(centroids)
 
-#assignació centres de clusters
+#assignaci? centres de clusters
 actives$PC1_cen <-  centroids$PC1_cen
 actives$PC2_cen <-  centroids$PC2_cen 
 actives$PC3_cen <-  centroids$PC3_cen 
@@ -381,7 +381,7 @@ actives %>%
 ```
 
 
-### Distàncies
+### Dist?ncies
 
 ```{r}
 # Distancia Euclidea al Centroid 
@@ -416,10 +416,10 @@ machine$out <- anomalies$out
 
 ```
 
-### Outliers de les Distàncies
+### Outliers de les Dist?ncies
 
 ```{r, fig.height= 8, fig.width= 15, fig.align= "center"}
-# dispersió de clusters i possibles outliers
+# dispersi? de clusters i possibles outliers
 actives %>% 
   mutate(kmean = as.factor(kmean)) %>% 
   ggplot(aes(x = kmean, y=dist_c, color= as.factor(kmean)))+
@@ -473,7 +473,7 @@ actives %>%
   facet_wrap(~kmean)
 ```
 
-### Gràfic 3D cluster 1 
+### Gr?fic 3D cluster 1 
 
 ```{r}
 clusty <- 1
@@ -492,10 +492,10 @@ plot_ly(cluster_sel, x= ~PC1_dia, y= ~PC2_hora, z= ~PC3_temp,
 ```
 
 
-### Distribució horaria de les anomalies
+### Distribuci? horaria de les anomalies
 
 ```{r, fig.height= 8, fig.width= 15, fig.align= "center"}
-# distribució horaria de les anomalies
+# distribuci? horaria de les anomalies
 machine %>% 
   filter(out == 1) %>% 
   ggplot(aes(x=hora, fill= grup))+
@@ -511,10 +511,10 @@ machine %>%
     facet_wrap(~grup)
 ```
 
-### Distribució diaria de les anomalies
+### Distribuci? diaria de les anomalies
 
 ```{r, fig.height= 8, fig.width= 15, fig.align= "center"}
-# distribució diaria de les anomalies
+# distribuci? diaria de les anomalies
 machine %>% 
   filter(out == 1) %>% 
   ggplot(aes(x=diaSet, fill= grup))+
@@ -538,7 +538,7 @@ machine %>%
   geom_line(color="grey70")+
   geom_point(data = subset(machine, out == 1), color = "red", size = 3)+
   theme_minimal()+
-  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.line.x = element_blank(),
@@ -558,7 +558,7 @@ machine %>%
   geom_line(color="grey70")+
   geom_point(data = subset(machine, out == 1), color = "red", size = 3)+
   theme_minimal()+
-  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+  labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.line.x = element_blank(),
@@ -578,7 +578,7 @@ machine %>%
     # geom_line(color="grey70")+
     geom_point(data = subset(machine, out == 1), color = "red", size = 3)+
     theme_bw()+
-    labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (ºC)")+
+    labs(title = "Registre Temperatura. (5s.)", x=" ", y="Temperatura (?C)")+
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
           axis.line.x = element_blank(),
