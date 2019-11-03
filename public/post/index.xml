@@ -17,7 +17,7 @@
       <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/11/03/detecci%C3%B3-anomalies/</guid>
-      <description></description>
+      <description>Llibrerieslibrary(tidyverse)library(funModeling)library(lubridate)library(weathermetrics)library(factoextra)library(corrplot)library(qgraph)library(kableExtra)library(scales)library(plotly)library(broom)library(tidymodels)Dadesmachine &amp;lt;- read_csv(&amp;quot;machine_temperature_system_failure.csv&amp;quot;)df_status(machine)## variable q_zeros p_zeros q_na p_na q_inf p_inf type unique## 1 timestamp 0 0 0 0 0 0 POSIXct/POSIXt 22683## 2 value 0 0 0 0 0 0 numeric 22695machine &amp;lt;- machine %&amp;gt;% mutate(temp = fahrenheit.to.celsius(value, round = 2))ggplot(machine, aes(x = timestamp, y=temp))+geom_line(color=&amp;quot;grey30&amp;quot;)+theme_minimal()+labs(title = &amp;quot;Registre Temperatura.</description>
     </item>
     
     <item>
